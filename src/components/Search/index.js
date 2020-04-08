@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import api from '../../services/api';
 import Constants from 'expo-constants';
 
 export default function Home(){
   const [search, setSearch] = useState('');
+  const [total, setTotal] = useState(0);
+  const [repositories, setRepositories] = useState('');
 
   async function handleSearch() {
     if(search === null ||search === '' ) return ;
 
+    setTotal('');
+    setRepositories('')
     try {
       const response = await api.get('/search/repositories', {
         params: {
@@ -17,7 +21,9 @@ export default function Home(){
           order: 'desc',
         }
       })
-      console.log(response.data.total_count)
+      setTotal(response.data.total_count);
+      setRepositories(response.data.items)
+
     }catch (e) {
       console.error(e)
     }
@@ -30,12 +36,36 @@ export default function Home(){
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Text>Buscar</Text>
         </TouchableOpacity>
+        <View>
+          
+        </View>
       </View>
       
 
-      <View style={styles.Searched}>
+      <ScrollView style={styles.Searched}>
+        {
+          repositories ? 
+          repositories.map(repository => (
 
-      </View>
+          <View style={styles.repository}>
+            <Text style={styles.repositoryTitle}>
+              {repository.owner.login}/{repository.name}
+            </Text>
+            <Text style={styles.repositoryDescription}>
+              {repository.description}
+            </Text>
+            <View style={styles.repositoryFooter}>
+              <Text>Stars{repository.stargazers_count}</Text>
+              <Text>Language{repository.language}</Text>
+              <Text>updated {repository.updated_at}</Text>
+            </View>
+          </View>
+
+          ))
+          :
+          <Text>nada</Text>
+        }
+      </ScrollView>
     </View>
   )
 }
@@ -66,5 +96,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 18,
     lineHeight: 20,
-  }
+  },
+
+
+  repository: {
+    paddingVertical: 8,
+    paddingHorizontal: 5,
+    backgroundColor: '#EEE',
+    borderColor: '#DDD',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginVertical: 5,
+  },
+  repositoryTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+
+  },
+  repositoryDescription: {
+    marginVertical: 5,
+    color: '#555',
+  },
+  repositoryFooter :{
+    marginVertical: 5,
+    flexDirection: 'row'
+  },
 })
