@@ -1,38 +1,87 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
 import api from '../../services/api';
-import Constants from 'expo-constants';
 import SearchInput from '../SearchInput';
+import styled from 'styled-components';
 
 export default function Users(){
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(1);
 
-  async function handleSearch() {
+  useEffect(()=> {
+    loadUsers()
+  }, [])
+
+
+
+  async function loadUsers() {
+    console.log('pagina', page)
     if(search === null ||search === '' ) return ;
 
-    setTotal('');
-    setRepositories('')
+    if(loading) return ;
+
+    if(total > 0 && users.length === total) return ;
+
+    setLoading(true)
     try {
       const response = await api.get('/search/users', {
         params: {
           q: search,
           sort: 'stars',
           order: 'desc',
+          page: page,
+          per_page: 10
         }
       })
       setTotal(response.data.total_count);
+
       setUsers(response.data.items)
 
     }catch (e) {
       console.error(e)
     }
+
+
+    setPage(page+1)
+    setLoading(false)
+
   }
   return (
     <View style={styles.container}>
-      <SearchInput value={search} set={setSearch} method={handleSearch} />
-    
+      <SearchInput value={search} set={setSearch} method={loadUsers} />
+      <FlatList 
+        style={{flex:1}}
+        data={users}
+        keyExtractor={user => String(user.login)} 
+        // showsVerticalScrollIndicator={false}
+        onEndReached={loadUsers}
+        onEndReachedThreshold={0.5}
+        // ListFooterComponent={loading ? 
+        //   <View style={{ height: 100}}>
+        //     <LottieView
+        //       resizeMode="contain"
+        //       source={loadingIcon} 
+        //       autoPlay loop
+        //     />
+        //   </View> : <></>
+        // }
+        renderItem={({item: user}) => (
+          <UserView style={{height: 100}}>
+            <Image
+              style={{width: 50}}
+              source={{
+                uri: user.avatar_url,
+              }}
+            />
+            <Text>{user.login}</Text>
+          </UserView>
+            
+        )}
+
+      />
     </View>
   )
 }
@@ -41,3 +90,14 @@ const styles = StyleSheet.create({
     flex:1,
   },
 })
+const UserList = styled.FlatList`
+  width: 100%;
+`
+const UserView = styled.View`
+  margin: 5px;
+  padding: 7px 5px;
+  background-color: #f1f8ff;
+  border-radius: 4px;
+  border: 1px solid #f6f8fa;
+
+`
