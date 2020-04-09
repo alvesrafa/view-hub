@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView } from 
 import api from '../../services/api';
 import Constants from 'expo-constants';
 
-export default function Home(){
+export default function Users(){
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
   const [repositories, setRepositories] = useState('');
