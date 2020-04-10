@@ -15,7 +15,11 @@ export default function Users(){
     loadUsers()
   }, [])
 
-
+  useEffect(()=> {
+    console.log('mudou, zera a lista')
+    setUsers([])
+    setPage(1)
+  }, [search])
 
   async function loadUsers() {
     console.log('pagina', page)
@@ -37,8 +41,7 @@ export default function Users(){
         }
       })
       setTotal(response.data.total_count);
-
-      setUsers(response.data.items)
+      setUsers([...users, ...response.data.items]);
 
     }catch (e) {
       console.error(e)
@@ -69,14 +72,10 @@ export default function Users(){
         //   </View> : <></>
         // }
         renderItem={({item: user}) => (
-          <UserView style={{height: 100}}>
-            <Image
-              style={{width: 50}}
-              source={{
-                uri: user.avatar_url,
-              }}
-            />
-            <Text>{user.login}</Text>
+          <UserView >
+            <ImageProfile source={{uri: user.avatar_url}}
+            style={{width: 50, height: 50}} />
+            <UserName>{user.login}</UserName>
           </UserView>
             
         )}
@@ -93,11 +92,26 @@ const styles = StyleSheet.create({
 const UserList = styled.FlatList`
   width: 100%;
 `
+const UserName = styled.Text`
+  font-size: 22px;
+  font-weight: bold;
+  margin-left: 4px;
+`
+const ImageProfile = styled.Image`
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  margin-right: 7px;
+
+`
 const UserView = styled.View`
   margin: 5px;
-  padding: 7px 5px;
+  padding: 13px 8px;
   background-color: #f1f8ff;
   border-radius: 4px;
   border: 1px solid #f6f8fa;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 5px 5px 5px #000;
 
 `
