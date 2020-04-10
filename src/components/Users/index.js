@@ -40,7 +40,9 @@ export default function Users(){
           per_page: 10
         }
       })
+      console.log(response.data.items)
       setTotal(response.data.total_count);
+      
       setUsers([...users, ...response.data.items]);
 
     }catch (e) {
@@ -55,10 +57,9 @@ export default function Users(){
   return (
     <View style={styles.container}>
       <SearchInput value={search} set={setSearch} method={loadUsers} />
-      <FlatList 
-        style={{flex:1}}
+      <UserList 
         data={users}
-        keyExtractor={user => String(user.login)} 
+        keyExtractor={(user, id) => String(id)} 
         // showsVerticalScrollIndicator={false}
         onEndReached={loadUsers}
         onEndReachedThreshold={0.5}
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
   },
 })
 const UserList = styled.FlatList`
-  width: 100%;
+  flex:1;
+  background-color: #f1f8ff;
 `
 const UserName = styled.Text`
   font-size: 22px;
@@ -105,13 +107,12 @@ const ImageProfile = styled.Image`
 
 `
 const UserView = styled.View`
-  margin: 5px;
+  margin: 5px 20px;
   padding: 13px 8px;
-  background-color: #f1f8ff;
+  background-color: #fafbfc;
   border-radius: 4px;
-  border: 1px solid #f6f8fa;
   flex-direction: row;
   align-items: center;
-  box-shadow: 5px 5px 5px #000;
+  border: 1px solid #DDD;
 
 `
