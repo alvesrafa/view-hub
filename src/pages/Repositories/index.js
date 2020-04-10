@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
 import api from '../../services/api';
-import SearchInput from '../SearchInput';
+import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons'
 
@@ -11,19 +11,17 @@ export default function Repositories(){
   const [repositories, setRepositories] = useState([]);
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1);
-
+  const data = Date.now();
   useEffect(()=> {
     loadRepositories()
   }, [])
 
   useEffect(()=> {
-    console.log('mudou, zera a lista')
     setRepositories([])
     setPage(1)
   }, [search])
 
   async function loadRepositories() {
-    console.log('pagina', page)
     if(search === null ||search === '' ) return ;
 
     if(loading) return ;
@@ -41,7 +39,6 @@ export default function Repositories(){
           per_page: 10
         }
       })
-      console.log(response.data.items)
       setTotal(response.data.total_count);
       
       setRepositories([...repositories, ...response.data.items]);
@@ -54,6 +51,27 @@ export default function Repositories(){
     setPage(page+1)
     setLoading(false)
 
+  }
+
+  function countTime(time){
+
+    let update = new Date(time);
+    let now = new Date();
+    let diaAgora = now.getDate(),
+    mesAgora = now.getMonth(),
+    anoAgora = now.getFullYear(),
+    horaAgora = now.getHours();
+    let diaUpdate = update.getDate(),
+    mesUpdate = update.getMonth(),
+    anoUpdate = update.getFullYear(),
+    horaUpdate = update.getHours();
+
+    if(anoAgora - anoUpdate !== 0) return (anoAgora - anoUpdate)+' years';
+    if(mesAgora - mesUpdate !== 0) return (mesAgora - mesUpdate)+' months';
+    if(diaAgora - diaUpdate !== 0) return (diaAgora - diaUpdate)+' days';
+    if(horaAgora - horaUpdate !== 0) return (horaAgora - horaUpdate)+' hours';
+
+    return '---';
   }
   return (
     <View style={styles.container}>
@@ -75,20 +93,21 @@ export default function Repositories(){
         // }
         renderItem={({item: repository}) => (
           <RepositoryView >
-            <AntDesign name="book" size={40} color="#DDD"/>
+            <AntDesign name="book" style={{width: '19%'}} size={36} color="#DDD"/>
             <RepositoryInfo>
               <Title>{repository.owner.login}/{repository.name}</Title>
-              <Description>{repository.description}</Description>
-              <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <Description>{(repository.description).substring(0, 250)}</Description>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Stars>
-                  <AntDesign name="star" size={16} color="#222"/>
-                  {repository.stargazers_count}
+                  <AntDesign name="star" size={16} color="#222"/> 
+                   {repository.stargazers_count}
                 </Stars>
                 <Language>
-                  <AntDesign name="tool" size={16} color="#222"/>
+                  <AntDesign name="tool" size={16} color="#ffd33d"/>
                   {repository.language}
                 </Language>
-                <UpdateTime>{repository.updated_at}</UpdateTime>
+                
+                <UpdateTime>Updated {countTime(repository.updated_at)} ago</UpdateTime>
               </View>
               
             </RepositoryInfo>
@@ -112,7 +131,7 @@ const RepositoryList = styled.FlatList`
   padding: 3px 8px;
 `
 const RepositoryInfo = styled.View`
-  width: 100%;
+  width: 79%;
 `
 const Title = styled.Text`
   color: #0366d6;
@@ -120,19 +139,19 @@ const Title = styled.Text`
 
 `
 const Description = styled.Text`
-  color: #aaa;
+  color: #333;
   width: 100%;
   margin: 5px 0;
 
 `
 const Stars = styled.Text`
-
+  color: #444;
 `
 const Language = styled.Text`
-
+  color: #444;
 `
 const UpdateTime = styled.Text`
-
+  color: #bbb;
 `
 const RepositoryView = styled.View`
   flex-direction: row;

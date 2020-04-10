@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
 import api from '../../services/api';
-import SearchInput from '../SearchInput';
+import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
 
 export default function Users(){

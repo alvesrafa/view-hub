@@ -22,7 +22,7 @@ export default function SearchInput(props){
 const Container = styled.View`
   width: 100%;
   align-items:center;
-  background: #24292e;
+  background: #24292E;
   padding: 13px 3px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -52,7 +52,6 @@ const Input = styled.TextInput`
 const SearchButton = styled.TouchableOpacity`
   border: 1px solid #0366d6;
   width: 15%; 
-  background-color: #24292e;
   height: 45px;
   justify-content: center;
   align-items: center;

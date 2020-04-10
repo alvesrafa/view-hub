@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Repositories from './components/Repositories';
-import Users from './components/Users';
+import Repositories from './pages/Repositories';
+import Users from './pages/Users';
 import { FontAwesome } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
