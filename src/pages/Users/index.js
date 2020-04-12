@@ -40,11 +40,13 @@ export default function Users({ navigation }){
           per_page: 10
         }
       })
+      if(response.data.total_count === 0 ) return console.log('Nenhum usuario encontrado')
+
       setTotal(response.data.total_count);
       setUsers([...users, ...response.data.items]);
 
     }catch (e) {
-      console.error(e)
+      console.log('Erro ', e)
     }
 
 
@@ -71,14 +73,14 @@ export default function Users({ navigation }){
         //   </View> : <></>
         // }
         renderItem={({item: user}) => (
-          <UserView >
+          <UserView onPress={() => navigation.navigate('Profile', {
+            username: user.login
+          })}>
 
             <ImageProfile source={{uri: user.avatar_url}}
             style={{width: 50, height: 50}} />
 
-            <UserName onPress={() => navigation.navigate('Profile', {
-              username: user.login
-            })}>{user.login}</UserName>
+            <UserName>{user.login}</UserName>
            
           </UserView>
             
@@ -109,7 +111,7 @@ const ImageProfile = styled.Image`
   margin-right: 7px;
 
 `
-const UserView = styled.View`
+const UserView = styled.TouchableOpacity`
   margin: 5px 20px;
   padding: 13px 8px;
   background-color: #fafbfc;

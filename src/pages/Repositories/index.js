@@ -5,6 +5,7 @@ import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
 import RepositoryView from '../../components/RepositoryView';
 
+
 export default function Repositories(){
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
@@ -40,6 +41,7 @@ export default function Repositories(){
           per_page: 10
         }
       })
+      
       setTotal(response.data.total_count);
       
       setRepositories([...repositories, ...response.data.items]);

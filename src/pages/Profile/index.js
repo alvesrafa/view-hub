@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 import api from '../../services/api';
 import styled from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ export default function({ route, navigation }){
     try {
       const response = await api.get(`/users/${username}`)
       
+
       setUser(response.data)
     }catch (e){
       console.error('ERRO! ', e)
@@ -25,7 +26,7 @@ export default function({ route, navigation }){
   return (
     <>
     {user ? 
-    <ScrollView style={{flex: 1, backgroundColor: '#f1f8ff'}}>
+    <View style={{flex: 1, backgroundColor: '#f1f8ff'}}>
     
       <Header>
         <UserHeader>
@@ -61,7 +62,7 @@ export default function({ route, navigation }){
       <ColorHeader>Repositorios: {user.public_repos}</ColorHeader>
       <ProfileRepositories username={username} total={user.public_repos}/>
 
-    </ScrollView>
+    </View>
     :
     <Text>Icon carregando</Text>}
     </>

@@ -2,9 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { AntDesign } from '@expo/vector-icons'
-
+import * as WebBrowser from 'expo-web-browser';
 
 export default function RepositoryView({repository}){
+
+  async function viewRepoOnGit() {
+    await WebBrowser.openBrowserAsync(`https://github.com/${repository.owner.login}/${repository.name}`);
+  }
+
   function countTime(time){
 
     let update = new Date(time);
@@ -29,7 +34,7 @@ export default function RepositoryView({repository}){
   return (
     <Repository >
       <AntDesign name="book" size={36} color="#DDD"/>
-      <RepositoryInfo>
+      <RepositoryInfo onPress={viewRepoOnGit}>
         <Title>{repository.owner.login}/{repository.name}</Title>
         <Description>{(repository.description)}</Description>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -50,7 +55,7 @@ export default function RepositoryView({repository}){
     </Repository>
   )
 }
-const RepositoryInfo = styled.View`
+const RepositoryInfo = styled.TouchableOpacity`
   width: 85%;
 `
 const Title = styled.Text`
