@@ -47,7 +47,7 @@ export default function Routes() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
         headerTintColor: 'white',
-        headerStyle: { backgroundColor: 'tomato' },
+        headerStyle: { backgroundColor: '#24292E' },
       }}>
         <Stack.Screen 
           name="Home" 
@@ -59,6 +59,7 @@ export default function Routes() {
         <Stack.Screen 
           name="Profile" 
           component={Profile} 
+          options={({ route }) => ({ title: route.params.username })}
         />
       </Stack.Navigator>
     </NavigationContainer>
