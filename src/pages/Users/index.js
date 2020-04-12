@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+
 import api from '../../services/api';
 import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
 
-export default function Users(){
+export default function Users({ navigation }){
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
   const [users, setUsers] = useState([]);
@@ -16,13 +17,11 @@ export default function Users(){
   }, [])
 
   useEffect(()=> {
-    console.log('mudou, zera a lista')
     setUsers([])
     setPage(1)
   }, [search])
 
   async function loadUsers() {
-    console.log('pagina', page)
     if(search === null ||search === '' ) return ;
 
     if(loading) return ;
@@ -40,9 +39,7 @@ export default function Users(){
           per_page: 10
         }
       })
-      console.log(response.data.items)
       setTotal(response.data.total_count);
-      
       setUsers([...users, ...response.data.items]);
 
     }catch (e) {
@@ -74,9 +71,14 @@ export default function Users(){
         // }
         renderItem={({item: user}) => (
           <UserView >
+            
             <ImageProfile source={{uri: user.avatar_url}}
             style={{width: 50, height: 50}} />
-            <UserName>{user.login}</UserName>
+
+            <UserName onPress={() => navigation.navigate('Profile', {
+              username: user.login
+            })}>{user.login}</UserName>
+           
           </UserView>
             
         )}

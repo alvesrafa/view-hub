@@ -22,7 +22,7 @@ export default function SearchInput(props){
 const Container = styled.View`
   width: 100%;
   align-items:center;
-  background: #24292E;
+  background-color: #24292E;
   padding: 13px 3px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;

@@ -1,14 +1,25 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome } from '@expo/vector-icons';
+
 import Repositories from './pages/Repositories';
 import Users from './pages/Users';
-import { FontAwesome } from '@expo/vector-icons';
+import Profile from './pages/Profile';
 
 const Tab = createBottomTabNavigator();
 
+function Teste() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+}
+
 export default function Routes() {
   return (
+    <>
     <NavigationContainer>
       <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -29,12 +40,16 @@ export default function Routes() {
       })}
       tabBarOptions={{
         activeTintColor: '#0366d6',
-        inactiveTintColor: '#24292e ',
+        inactiveTintColor: '#000',
       }}
       >
         <Tab.Screen name="Users" component={Users} />
         <Tab.Screen name="Repositories" component={Repositories} />
+        <Tab.Screen name="Teste" component={Teste} />
+        
       </Tab.Navigator>
+      
     </NavigationContainer>
+    </>
   );
 }
