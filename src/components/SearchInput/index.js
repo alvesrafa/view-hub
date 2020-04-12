@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import {Feather} from '@expo/vector-icons';
 
@@ -10,7 +9,7 @@ export default function SearchInput(props){
       <Title>VIEW HUB</Title>
 
       <SearchBlock>
-        <Input value={props.value} onChangeText={props.set} />
+        <Input value={props.value} onChangeText={props.set} onSubmitEditing={props.method} />
         <SearchButton  onPress={props.method}>
           <Feather name="search" size={32} color="#0366d6" />
         </SearchButton>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 
 import api from '../../services/api';
 import SearchInput from '../../components/SearchInput';
@@ -28,6 +28,7 @@ export default function Users({ navigation }){
 
     if(total > 0 && users.length === total) return ;
 
+    Keyboard.dismiss();
     setLoading(true)
     try {
       const response = await api.get('/search/users', {
@@ -71,7 +72,7 @@ export default function Users({ navigation }){
         // }
         renderItem={({item: user}) => (
           <UserView >
-            
+
             <ImageProfile source={{uri: user.avatar_url}}
             style={{width: 50, height: 50}} />
 
