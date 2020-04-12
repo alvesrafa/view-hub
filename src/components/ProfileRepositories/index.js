@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, Button } from 'react-native';
+import { ScrollView, Alert } from 'react-native';
 import api from '../../services/api';
 import RepositoryView from '../RepositoryView';
 import * as WebBrowser from 'expo-web-browser';
@@ -25,7 +25,7 @@ export default function ProfileRepositories({ username, total }){
         setRepositories(response.data)
         
     }catch(e) {
-      console.error('Erro', e)
+      Alert.alert('Erro com a conexão', 'Verifique sua conexão com a internet e tente novamente.')
     }
   }
   useEffect(()=> {

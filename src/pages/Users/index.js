@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard } from 'react-native';
-
+import { Alert, Keyboard } from 'react-native';
 import api from '../../services/api';
 import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Users({ navigation }){
   const [search, setSearch] = useState('');
@@ -22,10 +22,11 @@ export default function Users({ navigation }){
   }, [search])
 
   async function loadUsers() {
+    
     if(search === null ||search === '' ) return ;
-
+    
     if(loading) return ;
-
+    
     if(total > 0 && users.length === total) return ;
 
     Keyboard.dismiss();
@@ -40,13 +41,17 @@ export default function Users({ navigation }){
           per_page: 10
         }
       })
-      if(response.data.total_count === 0 ) return console.log('Nenhum usuario encontrado')
+      if(response.data.total_count === 0 ){
+        setPage(page+1)
+        setLoading(false)
+        return Alert.alert('Nenhum usuário encontrado com esse nome', 'Verifique o usuário e tente novamente.')
+      } 
 
       setTotal(response.data.total_count);
       setUsers([...users, ...response.data.items]);
 
     }catch (e) {
-      console.log('Erro ', e)
+      Alert.alert('Erro com a conexão', 'Verifique sua conexão com a internet e tente novamente.')
     }
 
 
@@ -55,8 +60,10 @@ export default function Users({ navigation }){
 
   }
   return (
-    <View style={styles.container}>
+    <Container>
       <SearchInput value={search} set={setSearch} method={loadUsers} />
+      {
+        users.length !== 0 ?
       <UserList 
         data={users}
         keyExtractor={(user, id) => String(id)} 
@@ -85,16 +92,35 @@ export default function Users({ navigation }){
           </UserView>
             
         )}
-
       />
-    </View>
+      :
+      <Main>
+        <Ionicons name="ios-people" size={50} color="#DDD"/>
+        <TextMain>Busque o usuário desejado no caixa de texto acima!</TextMain>
+      </Main>
+    }
+    </Container>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-  },
-})
+
+const Container = styled.View`
+  flex:1;
+  background-color: #f1f8ff;
+
+`
+const Main = styled.View`
+  flex:1;
+  background-color: #f1f8ff;
+  justify-content: center;
+  align-items: center;
+`
+const TextMain = styled.Text`
+  color: #AAA;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  width: 70%;
+`
 const UserList = styled.FlatList`
   flex:1;
   background-color: #f1f8ff;

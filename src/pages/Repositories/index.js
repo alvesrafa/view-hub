@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard } from 'react-native';
+import { View, Alert, Keyboard } from 'react-native';
 import api from '../../services/api';
 import SearchInput from '../../components/SearchInput';
 import styled from 'styled-components';
 import RepositoryView from '../../components/RepositoryView';
-
+import { AntDesign } from '@expo/vector-icons'
 
 export default function Repositories(){
   const [search, setSearch] = useState('');
@@ -41,13 +41,18 @@ export default function Repositories(){
           per_page: 10
         }
       })
+      if(response.data.total_count === 0 ){
+        setPage(page+1)
+        setLoading(false)
+        return Alert.alert('Nenhum repositório encontrado com esse nome.', 'Verifique e tente novamente.');
+      } 
       
       setTotal(response.data.total_count);
       
       setRepositories([...repositories, ...response.data.items]);
 
     }catch (e) {
-      console.error(e)
+      Alert.alert('Erro com a conexão', 'Verifique sua conexão com a internet e tente novamente.')
     }
 
 
@@ -58,8 +63,10 @@ export default function Repositories(){
 
 
   return (
-    <View style={styles.container}>
+    <Container>
       <SearchInput value={search} set={setSearch} method={loadRepositories} />
+      {
+        repositories.length > 0 ?
       <RepositoryList 
         data={repositories}
         keyExtractor={(repository, id) => String(id)} 
@@ -78,16 +85,33 @@ export default function Repositories(){
         renderItem={({item: repository}) => (
           <RepositoryView repository={repository}/>
         )}
-
       />
-    </View>
+      :
+      <Main>
+        <AntDesign name="book" size={50} color="#DDD"/>
+        <TextMain>Busque o repositório desejado no caixa de texto acima!</TextMain>
+      </Main>
+    }
+    </Container>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-  },
-})
+const Container = styled.View`
+  flex:1;
+  background-color: #f1f8ff;
+`
+const Main = styled.View`
+  flex:1;
+  background-color: #f1f8ff;
+  justify-content: center;
+  align-items: center;
+`
+const TextMain = styled.Text`
+  color: #AAA;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  width: 70%;
+`
 const RepositoryList = styled.FlatList`
   flex:1;
   background-color: #f1f8ff;
