@@ -36,7 +36,11 @@ export default function RepositoryView({repository}){
       <AntDesign name="book" size={36} color="#DDD"/>
       <RepositoryInfo onPress={viewRepoOnGit}>
         <Title>{repository.owner.login}/{repository.name}</Title>
-        <Description>{(repository.description)}</Description>
+        <Description>
+          {
+          repository.description
+          }
+        </Description>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Stars>
             <AntDesign name="star" size={16} color="#222"/> 

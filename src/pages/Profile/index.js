@@ -59,7 +59,6 @@ export default function({ route, navigation }){
         </Follow>
         
       </Header>
-      <ColorHeader>Repositorios: {user.public_repos}</ColorHeader>
       <ProfileRepositories username={username} total={user.public_repos}/>
 
     </View>

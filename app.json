@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ViewHub",
+    "name": "View Hub",
     "slug": "view-hub",
     "platforms": [
       "ios",
@@ -13,7 +13,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#24292e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,6 +23,9 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "sdkVersion": "37.0.0",
+    "description": "Aplicativo mobile para buscar e ver perfis/repositórios do GitHub de forma dinâmica.",
+    "githubUrl": "https://github.com/alvesrafa/view-hub"
   }
 }
